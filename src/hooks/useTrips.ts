@@ -5,13 +5,19 @@ import { useLocalStorage } from './useLocalStorage';
 export function useTrips() {
     const [trips, setTrips] = useLocalStorage<Trip[]>('mileage-trips', []);
 
-    const addTrip = (trip: Omit<Trip, 'id' | 'mileage' | 'costPerKm'>) => {
-        const mileage = trip.distance / trip.fuel;
-        const costPerKm = trip.price ? (trip.fuel * trip.price) / trip.distance : undefined;
+    const addTrip = (trip: Omit<Trip, 'id' | 'mileage' | 'costPerKm' | 'distance'> & { distance?: number }) => {
+        // Calculate distance from odometer if provided
+        const calculatedDistance = (trip.startOdometer !== undefined && trip.endOdometer !== undefined)
+            ? trip.endOdometer - trip.startOdometer
+            : (trip.distance || 0);
+
+        const mileage = calculatedDistance > 0 && trip.fuel > 0 ? calculatedDistance / trip.fuel : 0;
+        const costPerKm = trip.price && calculatedDistance > 0 ? (trip.fuel * trip.price) / calculatedDistance : undefined;
 
         const newTrip: Trip = {
             ...trip,
             id: crypto.randomUUID(),
+            distance: calculatedDistance,
             mileage,
             costPerKm,
         };
@@ -39,18 +45,19 @@ export function useTrips() {
             };
         }
 
-        const mileages = trips.map((t) => t.mileage);
+        const mileages = trips.map((t) => t.mileage).filter(m => m > 0);
         const totalDistance = trips.reduce((sum, t) => sum + t.distance, 0);
         const totalFuel = trips.reduce((sum, t) => sum + t.fuel, 0);
         const totalCost = trips.reduce((sum, t) => sum + (t.fuel * (t.price || 0)), 0);
 
         return {
-            averageMileage: totalDistance / totalFuel,
-            bestMileage: Math.max(...mileages),
-            lowestMileage: Math.min(...mileages),
+            averageMileage: totalFuel > 0 ? totalDistance / totalFuel : 0,
+            bestMileage: mileages.length > 0 ? Math.max(...mileages) : 0,
+            lowestMileage: mileages.length > 0 ? Math.min(...mileages) : 0,
             totalDistance,
             totalFuel,
             totalCost,
+            projectedRange: mileages.length > 0 ? (totalDistance / totalFuel) * 50 : 0, // Mock projected range based on 50L tank
         };
     }, [trips]);
 

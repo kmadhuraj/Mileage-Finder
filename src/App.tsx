@@ -4,30 +4,38 @@ import { MileageCalculator } from './components/MileageCalculator';
 import { TripHistory } from './components/TripHistory';
 import { TrendChart } from './components/TrendChart';
 import { Alerts } from './components/Alerts';
+import { RoutePlanner } from './components/RoutePlanner';
+import { FloatingSpeedometer } from './components/FloatingSpeedometer';
 import { useTrips } from './hooks/useTrips';
 
 function App() {
   const { trips, stats, addTrip, deleteTrip, clearHistory } = useTrips();
+
+  const lastEndOdo = trips.length > 0 ? trips[0].endOdometer : undefined;
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-        {/* Header Section */}
+        {/* Analytics Overview */}
         <section>
           <StatsCards stats={stats} />
         </section>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-          {/* Left Column: Form & Alerts */}
+          {/* Action Center: Entry Form & Alerts */}
           <div className="lg:col-span-1 space-y-6">
-            <MileageCalculator onAdd={addTrip} />
+            <MileageCalculator onAdd={addTrip} lastEndOdo={lastEndOdo} />
             <Alerts trips={trips} />
           </div>
 
-          {/* Right Column: Analytics & History */}
+          {/* Visual Insights & Routing */}
           <div className="lg:col-span-2 space-y-8">
+            <section>
+              <RoutePlanner stats={stats} />
+            </section>
+
             <section>
               <TrendChart trips={trips} />
             </section>
@@ -43,8 +51,10 @@ function App() {
         </div>
       </main>
 
+      <FloatingSpeedometer />
+
       <footer className="py-12 border-t border-slate-200 dark:border-slate-800 text-center text-slate-500 text-sm">
-        <p>© {new Date().getFullYear()} EcoDrive - Modern Mileage Finder & Fuel Tracker</p>
+        <p>© {new Date().getFullYear()} EcoDrive - The Ultimate Fuel Tracker</p>
       </footer>
     </div>
   );
