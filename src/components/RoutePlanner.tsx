@@ -133,7 +133,7 @@ export const RoutePlanner: React.FC<Props> = ({ stats }) => {
         const fuelNeeded = distance / (stats.averageMileage || 15);
         const bestFuelNeeded = distance / (stats.bestMileage || 18);
         const fuelSavings = Math.max(0, fuelNeeded - bestFuelNeeded);
-        const expense = fuelNeeded * 1.8;
+        const expense = fuelNeeded * 95; // Assuming avg fuel price in India ~₹95/L
 
         const recommendations = [
             `Maintain a steady speed of 60-80 km/h for optimal efficiency.`,
@@ -290,7 +290,7 @@ export const RoutePlanner: React.FC<Props> = ({ stats }) => {
                                 </div>
                                 <div className="glass-card p-4 flex flex-col justify-center">
                                     <p className="text-[10px] uppercase opacity-50 font-bold">Fuel Cost</p>
-                                    <p className="text-xl font-black">${report.expense}</p>
+                                    <p className="text-xl font-black">₹{report.expense}</p>
                                 </div>
                                 <div className="glass-card p-4 flex flex-col justify-center">
                                     <p className="text-[10px] uppercase opacity-50 font-bold">Fuel Needed</p>

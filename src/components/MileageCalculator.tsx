@@ -15,6 +15,17 @@ export const MileageCalculator: React.FC<Props> = ({ onAdd, lastEndOdo }) => {
     const [capacity, setCapacity] = useState('');
     const [startOdo, setStartOdo] = useState(lastEndOdo?.toString() || '');
     const [endOdo, setEndOdo] = useState('');
+    const [inputMethod, setInputMethod] = useState<'Litres' | 'Bars'>('Litres');
+    const [selectedBar, setSelectedBar] = useState<number | 'Blinking' | null>(null);
+
+    const FUEL_MAP: Record<string, number> = {
+        '7': 12.0, '6': 10.5, '5': 9.0, '4': 7.0, '3': 5.5, '2': 4.0, '1': 2.0, 'Blinking': 1.0
+    };
+
+    const handleBarSelect = (val: number | 'Blinking') => {
+        setSelectedBar(val);
+        setFuel(FUEL_MAP[val.toString()].toString());
+    };
 
     useEffect(() => {
         if (lastEndOdo) setStartOdo(lastEndOdo.toString());
@@ -78,7 +89,7 @@ export const MileageCalculator: React.FC<Props> = ({ onAdd, lastEndOdo }) => {
         <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="glass-card p-8 lg:sticky lg:top-24"
+            className="glass-card p-8"
         >
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400">
@@ -135,30 +146,98 @@ export const MileageCalculator: React.FC<Props> = ({ onAdd, lastEndOdo }) => {
                     </div>
                 )}
 
-                <div className="grid grid-cols-2 gap-4">
-                    <div>
-                        <label className="block text-sm font-medium mb-1.5 opacity-70">Fuel (Litres)</label>
-                        <input
-                            type="number"
-                            value={fuel}
-                            onChange={(e) => setFuel(e.target.value)}
-                            placeholder="e.g. 35"
-                            className="input-field"
-                            required
-                            step="any"
-                        />
+                <div className="space-y-4">
+                    <label className="block text-sm font-medium opacity-70">Fuel Input Method</label>
+                    <div className="flex gap-2 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl">
+                        {['Litres', 'Bars'].map((m) => (
+                            <button
+                                key={m}
+                                type="button"
+                                onClick={() => setInputMethod(m as 'Litres' | 'Bars')}
+                                className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${inputMethod === m
+                                    ? 'bg-white dark:bg-slate-700 shadow-sm text-blue-600'
+                                    : 'text-slate-500'
+                                    }`}
+                            >
+                                {m}
+                            </button>
+                        ))}
                     </div>
-                    <div>
-                        <label className="block text-sm font-medium mb-1.5 opacity-70">Price/Litre</label>
-                        <input
-                            type="number"
-                            value={price}
-                            onChange={(e) => setPrice(e.target.value)}
-                            placeholder="e.g. 1.85"
-                            className="input-field"
-                            step="any"
-                        />
-                    </div>
+
+                    {inputMethod === 'Bars' ? (
+                        <div className="space-y-3">
+                            <div className="flex items-end gap-1.5 h-16 bg-slate-50 dark:bg-slate-800/30 p-2 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+                                {[1, 2, 3, 4, 5, 6, 7].map((bar) => (
+                                    <button
+                                        key={bar}
+                                        type="button"
+                                        onClick={() => handleBarSelect(bar)}
+                                        className={`flex-1 rounded-sm transition-all ${selectedBar !== 'Blinking' && (selectedBar as number) >= bar
+                                            ? 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.3)]'
+                                            : 'bg-slate-200 dark:bg-slate-700'
+                                            }`}
+                                        style={{ height: `${(bar / 7) * 100}%` }}
+                                    />
+                                ))}
+                            </div>
+                            <button
+                                type="button"
+                                onClick={() => handleBarSelect('Blinking')}
+                                className={`w-full py-2 rounded-xl text-[10px] font-bold transition-all border ${selectedBar === 'Blinking'
+                                    ? 'bg-red-500 border-red-500 text-white animate-pulse'
+                                    : 'border-slate-200 dark:border-slate-800 text-slate-400'
+                                    }`}
+                            >
+                                RESERVE (Blinking)
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium mb-1.5 opacity-70">Fuel (Litres)</label>
+                                <input
+                                    type="number"
+                                    value={fuel}
+                                    onChange={(e) => setFuel(e.target.value)}
+                                    placeholder="e.g. 35"
+                                    className="input-field"
+                                    required
+                                    step="any"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-1.5 opacity-70">Price/Litre</label>
+                                <input
+                                    type="number"
+                                    value={price}
+                                    onChange={(e) => setPrice(e.target.value)}
+                                    placeholder="e.g. ₹95.00"
+                                    className="input-field"
+                                    step="any"
+                                />
+                            </div>
+                        </div>
+                    )}
+
+                    {inputMethod === 'Bars' && (
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="p-3 bg-blue-500/5 rounded-xl border border-blue-500/10">
+                                <p className="text-[10px] uppercase font-bold opacity-50">Est. Fuel</p>
+                                <p className="text-lg font-black text-blue-500">{fuel || '0'} L</p>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-1.5 opacity-70">Price/Litre</label>
+                                <input
+                                    type="number"
+                                    value={price}
+                                    onChange={(e) => setPrice(e.target.value)}
+                                    placeholder="₹95.00"
+                                    className="input-field"
+                                    step="any"
+                                />
+                            </div>
+                        </div>
+                    )}
                 </div>
 
                 <div className="flex items-center gap-2 py-2 px-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl text-xs opacity-60">

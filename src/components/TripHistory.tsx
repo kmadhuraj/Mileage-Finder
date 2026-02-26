@@ -126,12 +126,12 @@ export const TripHistory: React.FC<Props> = ({ trips, onDelete, onClear }) => {
                                     </td>
                                     <td className="px-6 py-4">
                                         <p className="text-sm font-bold">{trip.fuel} L</p>
-                                        {trip.price && <p className="text-[10px] opacity-40 font-medium">${trip.price}/L</p>}
+                                        {trip.price && <p className="text-[10px] opacity-40 font-medium">₹{trip.price}/L</p>}
                                     </td>
                                     <td className="px-6 py-4">
                                         <span className={`px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider uppercase ${trip.mileage > 15 ? 'bg-emerald-500/10 text-emerald-600' :
-                                                trip.mileage > 10 ? 'bg-blue-500/10 text-blue-600' :
-                                                    'bg-red-500/10 text-red-600'
+                                            trip.mileage > 10 ? 'bg-blue-500/10 text-blue-600' :
+                                                'bg-red-500/10 text-red-600'
                                             }`}>
                                             {trip.mileage.toFixed(2)} km/L
                                         </span>

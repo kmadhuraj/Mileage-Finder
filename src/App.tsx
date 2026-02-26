@@ -5,6 +5,7 @@ import { TripHistory } from './components/TripHistory';
 import { TrendChart } from './components/TrendChart';
 import { Alerts } from './components/Alerts';
 import { RoutePlanner } from './components/RoutePlanner';
+import { BikeFuelVisualizer } from './components/BikeFuelVisualizer';
 import { FloatingSpeedometer } from './components/FloatingSpeedometer';
 import { useTrips } from './hooks/useTrips';
 
@@ -19,13 +20,14 @@ function App() {
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
         {/* Analytics Overview */}
-        <section>
+        <section className="grid grid-cols-1 gap-8">
           <StatsCards stats={stats} />
+          <BikeFuelVisualizer stats={stats} />
         </section>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           {/* Action Center: Entry Form & Alerts */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="lg:col-span-1 lg:sticky lg:top-24 space-y-6 self-start">
             <MileageCalculator onAdd={addTrip} lastEndOdo={lastEndOdo} />
             <Alerts trips={trips} />
           </div>
