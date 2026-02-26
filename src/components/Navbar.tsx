@@ -21,7 +21,7 @@ export const Navbar: React.FC = () => {
     }, [isDark]);
 
     return (
-        <nav className="sticky top-0 z-50 w-full glass-card !rounded-none border-t-0 border-x-0 bg-white/70 dark:bg-slate-950/70">
+        <nav className="sticky top-0 z-50 w-full glass-card !rounded-none border-t-0 border-x-0 bg-white/70 dark:bg-[#000000]/70">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16 items-center">
                     <div className="flex items-center gap-2">

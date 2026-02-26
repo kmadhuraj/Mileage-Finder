@@ -56,17 +56,17 @@ export const TripHistory: React.FC<Props> = ({ trips, onDelete, onClear }) => {
             <div className="p-6 border-b border-slate-200 dark:border-slate-800 flex flex-wrap justify-between items-center gap-4">
                 <div className="flex items-center gap-4">
                     <h3 className="font-bold text-lg">Detailed Trip Log</h3>
-                    <div className="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+                    <div className="flex bg-slate-100 dark:bg-white/5 p-1 rounded-lg">
                         <button
                             onClick={() => setView('all')}
-                            className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${view === 'all' ? 'bg-white dark:bg-slate-700 shadow-sm' : 'opacity-50'}`}
+                            className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${view === 'all' ? 'bg-white dark:bg-white/10 shadow-sm' : 'opacity-50'}`}
                         >
                             <TableIcon className="w-3 h-3 inline mr-1" />
                             All
                         </button>
                         <button
                             onClick={() => setView('weekly')}
-                            className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${view === 'weekly' ? 'bg-white dark:bg-slate-700 shadow-sm' : 'opacity-50'}`}
+                            className={`px-3 py-1 rounded-md text-xs font-bold transition-all ${view === 'weekly' ? 'bg-white dark:bg-white/10 shadow-sm' : 'opacity-50'}`}
                         >
                             <Calendar className="w-3 h-3 inline mr-1" />
                             Weekly
@@ -93,7 +93,7 @@ export const TripHistory: React.FC<Props> = ({ trips, onDelete, onClear }) => {
             <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                     <thead>
-                        <tr className="bg-slate-50 dark:bg-slate-900/50 text-[10px] uppercase tracking-wider text-slate-500">
+                        <tr className="bg-slate-50 dark:bg-white/2 text-[10px] uppercase tracking-wider text-slate-500">
                             <th className="px-6 py-4 font-bold">Date / Weather</th>
                             <th className="px-6 py-4 font-bold">Odometer / Dist</th>
                             <th className="px-6 py-4 font-bold">Fuel Used</th>
@@ -110,7 +110,7 @@ export const TripHistory: React.FC<Props> = ({ trips, onDelete, onClear }) => {
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0, x: -20 }}
-                                    className="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors"
+                                    className="hover:bg-slate-50/50 dark:hover:bg-white/[0.02] transition-colors"
                                 >
                                     <td className="px-6 py-4">
                                         <p className="text-sm font-bold">{format(new Date(trip.date), 'MMM dd, yyyy')}</p>

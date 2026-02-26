@@ -1,48 +1,54 @@
-@import "tailwindcss";
-
 @theme {
   --color-brand-primary: #3b82f6;
-  --color-brand-secondary: #10b981;
+  --color-brand-secondary: #0ea5e9;
   --color-brand-accent: #f59e0b;
-  
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --font-sans: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 @layer base {
   body {
-    @apply bg-slate-50 text-slate-900 transition-colors duration-300;
+    @apply bg-[#f8fafc] text-slate-900 transition-colors duration-500 font-sans;
   }
-  
+
   .dark body {
-    @apply bg-slate-950 text-slate-100;
+    @apply bg-[#000000] text-white;
   }
 }
 
 @layer components {
   .glass-card {
-    @apply bg-white/80 backdrop-blur-md border border-slate-200 shadow-xl rounded-2xl;
+    @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_rgba(0, 0, 0, 0.06)] rounded-[2rem] transition-all duration-300;
   }
-  
+
   .dark .glass-card {
-    @apply bg-slate-900/80 border-slate-800 shadow-2xl;
+    @apply bg-slate-900/40 border-white/5 shadow-[0_8px_32px_rgba(0, 0, 0, 0.4)] backdrop-blur-2xl;
   }
-  
+
+  .dark .glass-card:hover {
+    @apply border-white/10;
+  }
+
   .btn-primary {
-    @apply px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl transition-all active:scale-95 shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold rounded-2xl transition-all active:scale-95 shadow-lg shadow-blue-500/25 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2;
   }
-  
+
   .btn-secondary {
-    @apply px-6 py-2.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-900 dark:text-slate-100 font-semibold rounded-xl transition-all active:scale-95 shadow-md;
+    @apply px-6 py-3 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800/80 dark:hover:bg-slate-800 text-slate-900 dark:text-slate-100 font-bold rounded-2xl transition-all active:scale-95 border border-transparent dark:border-white/5;
   }
-  
+
   .input-field {
-    @apply w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all;
+    @apply w-full px-5 py-3.5 bg-white dark:bg-slate-900/80 border border-slate-200 dark:border-white/10 rounded-2xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all placeholder:text-slate-400 dark:placeholder:text-slate-600;
+  }
+
+  .badge {
+    @apply px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest;
   }
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -50,5 +56,18 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-300 dark:bg-slate-700 rounded-full hover:bg-slate-400 dark:hover:bg-slate-600;
+  @apply bg-slate-200 dark:bg-slate-800 rounded-full hover:bg-slate-300 dark:hover:bg-slate-700;
+}
+
+/* Map Dark Mode Filters */
+.dark .leaflet-tile-container {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+.dark .leaflet-container {
+  background-color: #020617 !important;
+}
+
+.dark .leaflet-bar a {
+  @apply bg-slate-900 border-white/10 text-slate-100 hover:bg-slate-800;
 }
